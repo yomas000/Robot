@@ -1,0 +1,6 @@
+tensorflow/
+.testing/
+__pycache__/
+*.mp3
+*.json
+
