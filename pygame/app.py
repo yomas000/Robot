@@ -28,7 +28,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    # if we are still waiting for it to load - display bar
+    # if we are still waiting for it to load - display loading sbar
     if load.still_loading:
         pygame.draw.circle(screen, (0, 255, 0), (512, 200), 150)
         pygame.draw.circle(screen, (255, 0, 0), (512, 200), 120)
@@ -50,7 +50,8 @@ while running:
             face.loadAnimations(load.returnArray)
             sprite_group.add(face)
             load.load_progress = 0
-    
+
+
 
     sprite_group.draw(screen)
     sprite_group.update()
