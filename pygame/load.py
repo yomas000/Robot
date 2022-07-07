@@ -1,5 +1,7 @@
 from threading import Thread
 import pygame, enum
+from requests import RequestException
+import speech_recognition as sr
 
 # Create an enum for the animations
 class LoadPath(enum.Enum):
@@ -18,6 +20,7 @@ class Load(Thread):
         self.load_progress = 0
         self.returnArray = {}
         self.still_loading = False
+        self.r = sr.Recognizer()
 
     def run(self):
         # must have variable name be the same as enum name
@@ -26,7 +29,6 @@ class Load(Thread):
         l_center = []
         r_center = []
         blink = []
-
         
         # look through enum and load images into an assosiatve array to pass back
         for animation in LoadPath:
@@ -37,5 +39,5 @@ class Load(Thread):
                 locals() [animation.name.lower()].append(pygame.image.load(filePath))
                 self.load_progress += 1
             self.returnArray[animation.name] = locals() [animation.name.lower()]
-
+        
         self.still_loading = False
