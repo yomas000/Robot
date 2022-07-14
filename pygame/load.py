@@ -15,6 +15,8 @@ class LoadPath(enum.Enum):
 class Load(Thread):
     # Start the thread and initizlize variables
     def __init__(self):
+        """This will start the thread running
+        """
         Thread.__init__(self)
         self.load_progress = 0
         self.returnArray = {}

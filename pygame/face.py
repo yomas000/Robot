@@ -21,6 +21,11 @@ class Face(pygame.sprite.Sprite):
         self.index = 0
 
     def loadAnimations(self, animationArray):
+        """This loads the animations into the separate arrays for animations
+
+        Args:
+            animationArray (Dictionary): This is a dictionary of arrays for the animations [(["RIGHT"]{image, image, etc})]. This should be returned with the Load.returnArray variable
+        """
         # Load in the data from the image array
         self.moveLeft = animationArray["LEFT"]
         self.moveRight = animationArray["RIGHT"]
@@ -34,6 +39,8 @@ class Face(pygame.sprite.Sprite):
         self.rect.topleft = [0, 0]
 
     def update(self):
+        """This is what is updated every frame, should be in pygame sprites
+        """
         match self.animationState:
             case State.NONE:
                 self.image = self.moveRight[0]
@@ -70,10 +77,25 @@ class Face(pygame.sprite.Sprite):
                     self.index += 1
 
     def StartBlink(self):
+        """This will trigger the robot to blink
+        """
         self.animationState = State.BLINK
     
     def Right(self):
+        """This will trigger the robot to look right
+        """
         self.animationState = State.RIGHT
     
     def Left(self):
+        """This will Trigger the robot to look left
+        """
         self.animationState = State.LEFT
+    
+    def setMood(self, moodEnum):
+        """This will set the mood of the robot changing the colors of the animations
+
+        Args:
+            moodEnum (mood.enum): An Enum of the mood the robot is in.
+        """
+        # TODO: change animation styles per mood
+        pass

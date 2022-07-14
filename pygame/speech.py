@@ -4,16 +4,23 @@ import speech_recognition as sr
 
 class Speech(Thread):
     def __init__(self):
+        """This will start the speech to text thread.
+
+            You must use speech.kill() to kill the thread.
+            
+            speech.found {Boolean}: will return true when there is text avaible for processing
+            speech.output {string}: will return with the speech that has been processed to a string
+        """
         Thread.__init__(self)
         self.r = sr.Recognizer()
         self.output = ""
-        self.found = False
-        self.kill = True
+        self.found = False #Will return true
+        self.running = True
 
     
     def run(self):
 
-        while self.kill:
+        while self.running:
             # Listen for audioF
             try:
                     
@@ -51,5 +58,7 @@ class Speech(Thread):
                     print("OS ERROR: {0}".format(e))
                     once = False
     
-    def Kill_Thread(self):
-        self.kill = False
+    def kill(self):
+        """This will kill the currently running speech-to-text thread
+        """
+        self.running = False

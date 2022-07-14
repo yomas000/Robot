@@ -1,0 +1,5 @@
+Openai (pip)
+pygame
+SpeechReconition pydub
+
+OpenAI API key

@@ -1,4 +1,3 @@
-from debugpy import listen
 import pygame
 from Face import Face
 from load import Load
@@ -73,7 +72,7 @@ while running:
     # If they want to stop the robot
     if speech.output == "hey robot shut down" or speech.output == "hey robot shutdown":
         running = False
-        speech.Kill_Thread()
+        speech.kill()
 
     sprite_group.draw(screen)
     sprite_group.update()
