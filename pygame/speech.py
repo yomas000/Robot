@@ -38,14 +38,10 @@ class Speech(Thread):
                     # Using google to recognize audio
                     MyText = self.r.recognize_google(audio2)
 
-                    self.found = True
 
                     MyText = MyText.lower()
 
                     self.output = MyText
-
-                    self.found = False
-                    print(MyText)
                         
             except sr.RequestError as e:
                 print("Could not request results; {0}".format(e))
@@ -57,6 +53,11 @@ class Speech(Thread):
                 if once:
                     print("OS ERROR: {0}".format(e))
                     once = False
+        
+        if self.output != "":
+            self.found = True
+        else:
+            self.found = False
     
     def kill(self):
         """This will kill the currently running speech-to-text thread

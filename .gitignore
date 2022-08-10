@@ -2,5 +2,5 @@ tensorflow/
 .testing/
 __pycache__/
 *.mp3
+*.wav
 *.json
-
