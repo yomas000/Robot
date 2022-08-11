@@ -1,8 +1,11 @@
+import commands
 import pygame
 from Face import Face
 from load import Load
 import calc
 from speech import Speech
+import menuUI
+import menuOptions
 
 pygame.init()
 
@@ -20,25 +23,51 @@ face = Face(0, 0)
 load = Load()
 speech = Speech()
 
-once = True
+if menuOptions.displayMenu:
+    menu = menuUI.menu()
+
+
 running = True
-command = ""
 whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 # start the loading thread
 load.start()
-speech.start()
+# Start speech only if enabled
+if menuOptions.voiceActivation: 
+    speech.start()
 
+
+previousCommand = ""
+speechFound = False
 
 while running:
     screen.fill((0, 0, 0))
+    
+
 
      # gets a loop of all events (button, mouse, etc) and iterates through to see what to do
     for event in pygame.event.get():
+        mouse_pos = pygame.mouse.get_pos() 
+        mouse_buttons = pygame.mouse.get_pressed()
+
+        if menuOptions.displayMenu:
+            if calc.checkHitbox(mouse_pos, menu.getMenuRect()) and mouse_buttons[0]:
+                menu.show = not menu.show # TODO Switch this for fucntion
+
+            if mouse_buttons[0] and menu.show:
+                menu.mouse_cords(mouse_pos)
+
+        if mouse_buttons[2]:
+            face.Left()
+
         if event.type == pygame.QUIT:
-            speech.Kill_Thread()
+            if menuOptions.voiceActivation:
+                speech.Kill_Thread()
             running = False
 
+    if previousCommand != speech.output:
+        previousCommand = speech.output
+        speechFound = True
 
     # if we are still waiting for it to load - display loading sbar
     if load.still_loading:
@@ -60,23 +89,31 @@ while running:
         if (load.load_progress == LOAD_AMOUNT):
             load.join()
             face.loadAnimations(load.returnArray)
+            # Add sprites here
             sprite_group.add(face)
+
+            if menuOptions.displayMenu:
+                sprite_group.add(menu)
+
             load.load_progress = 0
 
 
     # If we found speech load it into a global variable
-    if speech.found:
-        command = speech.output
-        print(command)
+    if speechFound:
+        if menuOptions.voiceActivation:
+            commands.checkCommand(speech.output)
+        
+        speechFound = False
+        print("Speech Found: " + speech.output)
         
     # If they want to stop the robot
     if speech.output == "hey robot shut down" or speech.output == "hey robot shutdown":
         running = False
         speech.kill()
 
+
     sprite_group.draw(screen)
     sprite_group.update()
     pygame.display.update() #updates the display
-    # command = ""
     clock.tick(24)
 pygame.quit()
